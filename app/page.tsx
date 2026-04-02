@@ -94,11 +94,11 @@ function Pill({ active, color, onClick, children }: {
   );
 }
 
-function MiniSparkline({ data, color, height = 32 }: { data: number[]; color: string; height?: number }) {
+function MiniSparkline({ data, color, height = 32, width = 80 }: { data: number[]; color: string; height?: number; width?: number }) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
-  const w = 80;
+  const w = width;
   const points = data.map((v, i) => `${(i / (data.length - 1)) * w},${height - ((v - min) / range) * (height - 4) - 2}`).join(" ");
   return (
     <svg width={w} height={height} className="inline-block">
@@ -138,7 +138,7 @@ function ExecSummaryTab() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { title: "앱 방문자 (MAU)", value: fmt(cur.visitors.total), trend: pct(cur.visitors.total, prev.visitors.total), spark: visitorSpark, color: "#64748b" },
-          { title: "거래고객수", value: fmt(cur.traders.total), trend: pct(cur.traders.total, prev.traders.total), spark: traderSpark, color: "#1B4FD8" },
+          { title: "해외주식거래고객수", value: fmt(cur.traders.total), trend: pct(cur.traders.total, prev.traders.total), spark: traderSpark, color: "#1B4FD8" },
           { title: "방문→거래 전환율", value: `${convRate}%`, trend: pct(Number(convRate), Number(convPrev)), spark: convSpark, color: "#10b981" },
           { title: "Returning 비중", value: `${(cur.traders.returning / cur.traders.total * 100).toFixed(1)}%`, trend: pct(cur.traders.returning / cur.traders.total, prev.traders.returning / prev.traders.total), spark: returningSpark, color: "#2563eb" },
         ].map((kpi, i) => (
@@ -255,6 +255,18 @@ function MAUTab() {
 
   return (
     <div className="space-y-6 animate-fade">
+      {/* Total Traders KPI */}
+      <SectionCard className="p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs text-ink-tertiary font-medium">해외주식거래고객수</p>
+            <p className="text-2xl font-extrabold tabular-nums text-ink mt-1">{fmt(data.total)}</p>
+            <TrendBadge value={pct(data.total, prev.traders.total)} />
+          </div>
+          <MiniSparkline data={monthlySnapshots.map(s => s.traders.total)} color="#1B4FD8" height={32} width={100} />
+        </div>
+      </SectionCard>
+
       {/* Segment KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {([
@@ -914,7 +926,7 @@ export default function DashboardPage() {
                 <p className="text-base font-bold text-white tabular-nums">{fmt(cur.visitors.total)}</p>
               </div>
               <div className="text-center">
-                <p className="text-[10px] text-slate-400">거래고객</p>
+                <p className="text-[10px] text-slate-400">해외주식거래고객</p>
                 <p className="text-base font-bold text-white tabular-nums">{fmt(cur.traders.total)}</p>
               </div>
               <div className="text-center">
