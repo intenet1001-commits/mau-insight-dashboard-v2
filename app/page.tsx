@@ -589,7 +589,7 @@ function FunnelTab() {
 type SegmentFilter = "all" | "newFirst" | "newDomToIntl" | "returning" | "resurrecting";
 
 function CohortTab() {
-  const [retView, setRetView] = useState<"trade" | "visit">("trade");
+
   const [segFilter, setSegFilter] = useState<SegmentFilter>("all");
   const [styleFilter, setStyleFilter] = useState<TradingStyle | "all">("all");
   const [showBehavior, setShowBehavior] = useState(false);
@@ -597,7 +597,7 @@ function CohortTab() {
   function getRetention(row: (typeof cohortData)[0]): (number | null)[] {
     if (segFilter !== "all") return row.segmentRetention[segFilter];
     if (styleFilter !== "all") return row.styleRetention[styleFilter];
-    return retView === "visit" ? row.visitRetention : row.tradeRetention;
+    return row.tradeRetention;
   }
 
   return (
@@ -711,16 +711,6 @@ function CohortTab() {
       <TradingStyleTrendSection />
 
       {/* Cohort Heatmap Controls */}
-      <div className="flex flex-wrap items-center gap-4">
-        <div className="flex gap-2">
-          {(["trade", "visit"] as const).map((rv) => (
-            <Pill key={rv} active={retView === rv} color="#1B4FD8" onClick={() => setRetView(rv)}>
-              {rv === "trade" ? "거래 리텐션" : "방문 리텐션"}
-            </Pill>
-          ))}
-        </div>
-      </div>
-
       <div className="space-y-2">
         <p className="text-[10px] text-ink-tertiary font-medium">세그먼트 필터</p>
         <div className="flex flex-wrap gap-2">
