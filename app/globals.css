@@ -2,26 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-feature-settings: "ss01", "cv01";
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid #1B4FD8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.scroll-hint {
+  position: relative;
+}
+.scroll-hint::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(to right, transparent, white);
+  pointer-events: none;
+}
+
+/* Health score ring */
+.health-ring {
+  transform: rotate(-90deg);
+}
+
+/* Smooth transitions */
+.animate-fade {
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card hover */
+.card-interactive {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.card-interactive:hover {
+  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  transform: translateY(-1px);
 }
